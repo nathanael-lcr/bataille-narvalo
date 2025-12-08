@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 
@@ -9,14 +8,11 @@ if (!file_exists($fichier)) {
 }
 
 $etat = json_decode(file_get_contents($fichier), true);
-//lit fichier json, renvoie son contenu sous forme de tableau associatif (true), le stocke dans état
 
 function save_state($file, $data) {
   file_put_contents($file, json_encode($data));
 }
 
-
-//si interaction avec boutons
 if (isset($_POST["reset_total"])) {
   $etat = ["j1" => null, "j2" => null];
   save_state($GLOBALS['fichier'], $etat);
@@ -29,10 +25,9 @@ if (isset($_POST["reset_total"])) {
 
 if (isset($_POST["joueur1"])) {
     if ($etat["j1"] === null) {
-        $etat["j1"] = session_id(); //attribue ID de session unique au j1
-        $_SESSION["role"] = "Joueur 1"; //le save dans la session
+        $etat["j1"] = session_id();
+        $_SESSION["role"] = "Joueur 1";
         save_state($fichier, $etat);
-        
     }
 }
 
@@ -40,21 +35,24 @@ if (isset($_POST["joueur2"])) {
     if ($etat["j2"] === null) {
         $etat["j2"] = session_id();
         $_SESSION["role"] = "Joueur 2";
-        save_state($fichier, $etat); //nom du fichier où save + contenu à save
-        
+        save_state($fichier, $etat);
     }
 }
 
-//vérifie que les deux sessions soient crées pour afficher la grille 
+// Vérification et redirection selon le rôle
 if ($etat["j1"] !== null && $etat["j2"] !== null) {
-    header("Location: game.php");
+    if ($_SESSION["role"] === "Joueur 1") {
+        header("Location: userA.php");
+        exit;
+    } elseif ($_SESSION["role"] === "Joueur 2") {
+        header("Location: userB.php");
+        exit;
+    }
 }
 
-// Détection automatique du rôle (si déjà assigné avant refresh)
 $role = $_SESSION["role"] ?? "Aucun rôle";
 
-header('refresh:5'); //refresh automatiquement 
-
+header('refresh:5');
 ?>
 
 <!DOCTYPE html>
