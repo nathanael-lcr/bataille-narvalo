@@ -2,8 +2,8 @@ A faire :
 
  X Créer une grille et l'afficher 
  X Créer deux pages A et B et gestion intelligente si déjà connecté
-    - Faire en sorte qu'on puisse pas être joueur 1 et 2
-    - Bouton pour se déconnecter d'une partie
+    X Faire en sorte qu'on puisse pas être joueur 1 et 2
+    X Bouton pour se déconnecter d'une partie
  - Faire en sorte que joueur A puisse modifier la grille du joueur B
  - Gérer la logique des tours
  - Afficher les batîments adversaire restants
