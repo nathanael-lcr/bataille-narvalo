@@ -1,11 +1,12 @@
 <?php
-  session_start();
+session_start();
 
-  include('./connexion.php');
+include('./connexion.php');
 
   $sql = new SqlConnect();
   $player = $_SESSION["role"] === 'joueur1' ?  'joueur2' : 'joueur1';
   $query = 'SELECT * FROM '.$player;
+ //prépare une requête SQL pour lire toutes les lignes de la table du joueur adverse.
   $req = $sql->db->prepare($query);
   $req->execute();
   $rows = $req->fetchAll(PDO::FETCH_ASSOC);
@@ -13,7 +14,6 @@
   var_dump($rows);
   
   $colsPerRow = 10;
-
 
 
 $fichier = "etat_joueurs.json";
@@ -116,13 +116,29 @@ if (isset($_POST["tirer"])) {
     $col = (int)$_POST["col"];
     
     if ($row >= 0 && $row < 10 && $col >= 0 && $col < 10) {
-        // Vérifier que la case n'a pas déjà été tirée
-        if ($grilles[$myPlayer]["tirs"][$row][$col] === null) {
-            // Récupérer la valeur de la grille adverse
-            $valeur = $grilles[$oppPlayer]["grille"][$row][$col];
-            // 1 si touché (valeur > 0), 0 si raté (valeur == 0)
-            $grilles[$myPlayer]["tirs"][$row][$col] = ($valeur > 0) ? 1 : 0;
-            save_state($fichier_grilles, $grilles);
+        // Vérifie que la case n'a pas déjà été tirée
+        $sql = "SELECT id FROM tirs WHERE id_joueur = :id_joueur AND x = :x AND y = :y";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([':id_joueur' => $myPlayer, ':x' => $row, ':y' => $col]);
+        
+        if (!$stmt->fetch()) {
+            // Vérifie s'il y a un bateau adverse à cet endroit
+            $sql = "SELECT id FROM grille WHERE id_joueur = :id_joueur AND x = :x AND y = :y";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([':id_joueur' => $oppPlayer, ':x' => $row, ':y' => $col]);
+            
+            // 1 si touché (bateau trouvé), 0 si raté
+            $touche = $stmt->fetch() ? 1 : 0;
+            
+            // Enregistrer le tir dans la base de données
+            $sql = "INSERT INTO tirs (id_joueur, x, y, touche) VALUES (:id_joueur, :x, :y, :touche)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([
+                ':id_joueur' => $myPlayer,
+                ':x' => $row,
+                ':y' => $col,
+                ':touche' => $touche
+            ]);
         }
     }
 }
@@ -136,7 +152,7 @@ header('refresh:5');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bataille Navale - <?= htmlspecialchars($myRole) ?></title>
-    <style>
+    <style> 
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
@@ -188,17 +204,11 @@ header('refresh:5');
             margin-top: 10px;
         }
 
-        table,
-        thead,
-        tbody,
-        tr,
-        th,
-        td {
+        table, thead,tbody, tr, th, td {
             border: 1px solid black;
         }
 
-        th,
-        td {
+        th, td {
             text-align: center;
             padding: 10px;
             width: 30px;
@@ -290,21 +300,29 @@ header('refresh:5');
 
             <!-- Grille adverse (tirs) -->
             <div class="grille-section">
-                <h3>Grille adverse (<?= htmlspecialchars($myRole === "Joueur 1" ? "Joueur 2" : "Joueur 1") ?>)</h3>
+                <h3>Grille adverse (<?= $myRole === "Joueur 1" ? "Joueur 2" : "Joueur 1" ?>)</h3>
+                <!-- On veut prend la grille adverse, pas la notre: if joueur === joueur 1 alors on attaque joueur 2-->
                 <table>
                     <thead>
                         <tr>
                             <th scope="col"></th>
+                            <!-- entete d'une colonne -->
                             <?php for ($j = 0; $j < 10; $j++) { ?>
                                 <th scope="col"><?php echo $j + 1 ?></th>
                             <?php } ?>
+                            <!-- Genere colonnes de 1 à 10 -->
                         </tr>
                     </thead>
                     <tbody>
                         <?php for ($i = 0; $i < 10; $i++) { ?>
                             <tr>
-                                <th scope="row"><?php echo chr(65 + $i) ?></th>
+                                <th scope="row">
+                                    <!-- entete d'une ligne -->
+                                    <?php echo chr(65 + $i) ?>
+                                    <!-- recrée l'alphabet -->
+                                </th>
                                 <?php for ($j = 0; $j < 10; $j++) { ?>
+                                    <!-- Boucle colonne interne -->
                                     <td class="clickable <?= 
                                         $grilles[$myPlayer]["tirs"][$i][$j] === 1 ? 'touche' : 
                                         ($grilles[$myPlayer]["tirs"][$i][$j] === 0 ? 'rate' : '')

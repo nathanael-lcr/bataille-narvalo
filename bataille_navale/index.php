@@ -33,7 +33,7 @@ if (isset($_POST["joueur1"])) {
             $message = "Impossible : vous occupez déjà le poste Joueur 2 depuis ce navigateur.";
         } else {
             $etat["j1"] = $currentSession;
-            $_SESSION["role"] = "Joueur 1";
+            $_SESSION["role"] = "joueur1";
             save_state($fichier, $etat);
             header("Location: game.php");
             exit;
@@ -49,7 +49,7 @@ if (isset($_POST["joueur2"])) {
             $message = "Impossible : vous occupez déjà le poste Joueur 1 depuis ce navigateur.";
         } else {
             $etat["j2"] = $currentSession;
-            $_SESSION["role"] = "Joueur 2";
+            $_SESSION["role"] = "joueur2";
             save_state($fichier, $etat);
             header("Location: game.php");
             exit;
