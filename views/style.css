@@ -1,7 +1,26 @@
-body{
-	background-color: green !important;
+body{ 
+	padding-top:10%;
+    min-height: 100vh; /* Prend toute la hauteur de l'écran */
+    background: radial-gradient(circle,rgba(92, 92, 92, 1) 0%, rgba(0, 0, 0, 1) 100%);
+    background-attachment: fixed; /* Le dégradé reste fixe au scroll */
     text-align: center;
+	}
+
+h1, h2{
+	text-transform: uppercase;
+	color: white;
+	font-family: "Sekuya", system-ui;
+  	font-weight: 400;
+  	font-style: normal;
 }
+h2, p {
+	font-family: "Montserrat", sans-serif;
+  	font-optical-sizing: auto;
+  	font-weight: 300;
+  	font-style: normal;
+	color: white;
+}
+/* GRILLE */
 .row {
 	display: flex;
 }
@@ -13,8 +32,36 @@ body{
 	width: 100%;
 	aspect-ratio: 1 / 1; /*carré*/
 	border: 1px solid black;
+	border-radius: 3px !important;
 	display: block;
 }
 .container{
-	padding:35px;
+	border: 0px solid; 
+	background-color: rgba(255, 255, 255, 0.1);
+	margin-top: 50px;
+	padding: 50px;
+	width: 40% !important;
+	border-radius: 5px !important;
+}
+
+/*BOUTONS*/
+.button {
+	margin-top: 30px;
+	margin-bottom: 30px;
+	
+	color:white;
+	border: 1px solid white !important;
+	background-color: #0E0E0E;
+	border-radius: 5px !important;
+	box-shadow: 10px 5px 5px #0E0E0E;
+	padding: 10px 30px;
+}
+#bloc{
+	border: 0px solid; 
+	background-color: rgba(255, 255, 255, 0.1);
+	margin-top: 50px;
+	padding: 40px;
+	margin-left: 120px;
+	margin-right: 120px;
+	border-radius: 5px !important;
 }
