@@ -61,7 +61,7 @@ h2, p {
 	border: 1px solid white !important;
 	background-color: #0E0E0E;
 	border-radius: 5px !important;
-	box-shadow: 10px 5px 5px #0E0E0E;
+	box-shadow: rgba(0, 0, 0, 0.5) 0px 7px 15px;
 	padding: 10px 30px;
 }
 #bloc{

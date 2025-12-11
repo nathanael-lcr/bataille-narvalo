@@ -8,23 +8,34 @@ error_reporting(E_ALL);
 $sql = new SqlConnect();
 $player = $_SESSION["role"] === 'joueur1' ? 'joueur2' : 'joueur1';
 $query = 'SELECT * FROM ' . $player;
-
 $req = $sql->db->prepare($query);
 $req->execute();
 $rows = $req->fetchAll(PDO::FETCH_ASSOC);
 
-$currentPlayer = $_SESSION["role"];
-$query2 = 'SELECT * FROM ' . $currentPlayer;
-
-$req2 = $sql->db->prepare($query2);
-$req2->execute();
-$myRows = $req2->fetchAll(PDO::FETCH_ASSOC);
+//victoire
+$sql_victory = new SqlConnect();
+//compte cases touchées joueur 2 sur joueur 1
+$query1 = "SELECT COUNT(*) as touches FROM joueur2 WHERE checked = 1 AND boat > 0";
+$req1 = $sql_victory->db->query($query1);
+$touches_j1 = $req1->fetch(PDO::FETCH_ASSOC)['touches'];
+//inversement
+$query2 = "SELECT COUNT(*) as touches FROM joueur1 WHERE checked = 1 AND boat > 0";
+$req2 = $sql_victory->db->query($query2);
+$touches_j2 = $req2->fetch(PDO::FETCH_ASSOC)['touches'];
 
 
 // Vérifier si c'est le tour du joueur actuel
 $isMyTurn = ($_SESSION["role"] === $currentTurn);
-
 $colsPerRow = 10;
+
+//condition victoire
+if ($touches_j1 >= 5) {
+  echo 'VICTOIRE DU JOUEUR 1';
+}
+
+if ($touches_j2 >= 5) {
+  echo 'VICTOIRE DU JOUEUR 2';
+}
 ?>
 
 <!DOCTYPE html>
@@ -58,7 +69,6 @@ $colsPerRow = 10;
 
     <div class="d-flex justify-content-center gap-5">
 
-      <!-- ====== GRILLE DE TIR (adversaire) ====== -->
       <div>
         <h3>Grille adverse</h3>
 
@@ -82,36 +92,6 @@ $colsPerRow = 10;
           echo '</div>';
         }
         ?>
-      </div>
-
-      <!-- ====== MA PROPRE GRILLE (bateaux) ====== -->
-      <div>
-        <h3>Vos bateaux</h3>
-
-        <?php
-        for ($i = 0; $i < count($myRows); $i += $colsPerRow) {
-          echo '<div class="row">';
-          for ($j = 0; $j < $colsPerRow; $j++) {
-            if (isset($myRows[$i + $j])) {
-              $cell = $myRows[$i + $j];
-
-              // Couleur : bateaux visibles
-              $color = $cell['boat'] > 0 ? '#6060FF' : '#F2EFEB'; // bleu clair = bateau
-        
-              // si touché : rouge
-              if ($cell['checked'] == 1 && $cell['boat'] > 0) {
-                $color = '#B82C2C';
-              }
-
-              echo '<div class="col">';
-              echo '<button class="cell" style="background-color:' . $color . ';" disabled></button>';
-              echo '</div>';
-            }
-          }
-          echo '</div>';
-        }
-        ?>
-
       </div>
     </div>
 
