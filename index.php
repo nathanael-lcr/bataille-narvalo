@@ -10,8 +10,20 @@ if (!file_exists($fichier)) {
 
 $etat = json_decode(file_get_contents($fichier), true);
 
+// Initialiser current_turn s'il n'existe pas
+if (!isset($etat['current_turn'])) {
+  $etat['current_turn'] = 'joueur1';
+  file_put_contents($fichier, json_encode($gameetatState));
+}
+
+$currentTurn = $etat['current_turn'];
+
+// Vérifier si c'est le tour du joueur actuel
+$isMyTurn = ($_SESSION["role"] === $currentTurn);
+
+
 if ($etat["j1"] != null && $etat["j2"] != null) {
-  include('./views/game.php'); 
+  include('./views/game.php');
 } else {
   include('./views/players-selected.php');
 }
