@@ -34,13 +34,21 @@ h2, p {
 	border: 1px solid black;
 	border-radius: 3px !important;
 	display: block;
+	transition: all 0.2s ease-in-out;
 }
+
+.cell:hover {
+	transform: scale(1.1);
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+	transition: all 0.2s ease-in-out;
+}
+
 .container{
 	border: 0px solid; 
 	background-color: rgba(255, 255, 255, 0.1);
 	margin-top: 50px;
 	padding: 50px;
-	width: 40% !important;
+	width: 50% !important;
 	border-radius: 5px !important;
 }
 
