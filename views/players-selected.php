@@ -30,8 +30,8 @@
     <h1>Connexion aux rôles</h1>
     <h2>Votre rôle actuel : <strong><?= $role ?></strong></h2>
     <p>
-      Joueur 1 : <?= $etat["j1"] ? "🟢 Occupé" : "🔴 Libre" ?><br>
-      Joueur 2 : <?= $etat["j2"] ? "🟢 Occupé" : "🔴 Libre" ?>
+      Joueur 1 : <?= $etat["j1"] ? "🔴 Occupé" : "🟢 Libre" ?><br>
+      Joueur 2 : <?= $etat["j2"] ? "🔴 Occupé" : "🟢 Libre" ?>
     </p>
 
     <form method="post">

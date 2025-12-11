@@ -12,7 +12,7 @@ class SqlConnect {
     // set your config here
     $this->host = '127.0.0.1';
     $this->port = '8889';   // MAMP default on some installs; verify in MAMP prefs
-    $this->dbname = 'battle';
+    $this->dbname = 'bataille_navale';
     $this->user = 'root';
     $this->password = 'root';
 

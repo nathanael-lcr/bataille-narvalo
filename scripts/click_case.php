@@ -2,6 +2,10 @@
 session_start();
 include('./sql-connect.php');
 
+  ini_set('display_errors', 1);
+  ini_set('display_startup_errors', 1);
+  error_reporting(E_ALL);
+
 if (isset($_POST["cell"])) {
   $sql = new SqlConnect();
 
@@ -10,7 +14,7 @@ if (isset($_POST["cell"])) {
   $query = '
     UPDATE '.$player.'
     SET checked = CASE WHEN checked = 0 THEN 1 ELSE 0 END
-    WHERE id_grid = :cell;
+    WHERE idgrid = :cell;
   ';
 
   $req = $sql->db->prepare($query);

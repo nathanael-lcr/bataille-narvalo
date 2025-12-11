@@ -25,6 +25,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/views/style.css" />
   </head>
   <body>
     <div class="container text-center">
@@ -34,16 +35,16 @@
           for ($j = 0; $j < $colsPerRow; $j++) {
               if (isset($rows[$i + $j])) {
                   $case = $rows[$i + $j];
-                  $color = $case['checked'] == 1 ? 'blue' : 'grey';
+                  $color = $case['checked'] == 1 ? 'blue' : 'white';
                   if ($case['checked'] == 1 && $case['boat'] > 0) {
                     $color = 'red';
                   }            
 
-                  $idgrid = $case['id_grid'];
+                  $idgrid = $case['idgrid'];
 
                   echo '<div class="col">';
-                  echo '<form method="post" action="../scripts/click_case.php">';
-                  echo '<button type="submit" name="cell" value="'.$idgrid.'" style="width:30px; height:30px; background-color:'.$color.';"></button>';
+                  echo '<form method="post" action="../scripts/click_case.php" class=form>';
+                  echo '<button type="submit" name="cell" value="'.$idgrid.'" class="cell" style="background-color:'.$color.';"></button>';
                   echo '</form>';
                   echo '</div>';
               }
@@ -53,7 +54,7 @@
     ?>
     </div>
     <form method="post" action="../scripts/reset_total.php">
-      <button type="submit" name="reset_total">
+      <button type="submit" name="reset_total" class="button">
         ❌ Fin de partie (RESET)
       </button>
     </form>
