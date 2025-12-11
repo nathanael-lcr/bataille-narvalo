@@ -1,23 +1,41 @@
 <?php
+  session_start();
   include('./scripts/save_state.php');
+
+  $currentSession = session_id();
 
   if (isset($_POST["joueur1"])) {
     if ($etat["j1"] === null) {
-      $etat["j1"] = session_id();
-      $_SESSION["role"] = "joueur1";
-      save_state("./etat_joueurs.json", $etat);
+      // Vérifier que cette session n'est pas déjà joueur2
+      if ($etat["j2"] === $currentSession) {
+        $error = "❌ Erreur : Vous êtes déjà Joueur 2 !";
+      } else {
+        $etat["j1"] = $currentSession;
+        $_SESSION["role"] = "joueur1";
+        save_state("./etat_joueurs.json", $etat);
+      }
+    } else {
+      $error = "❌ Joueur 1 est déjà occupé !";
     }
   }
 
   if (isset($_POST["joueur2"])) {
     if ($etat["j2"] === null) {
-      $etat["j2"] = session_id();
-      $_SESSION["role"] = "joueur2";
-      save_state("./etat_joueurs.json", $etat);
+      // Vérifier que cette session n'est pas déjà joueur1
+      if ($etat["j1"] === $currentSession) {
+        $error = "❌ Erreur : Vous êtes déjà Joueur 1 !";
+      } else {
+        $etat["j2"] = $currentSession;
+        $_SESSION["role"] = "joueur2";
+        save_state("./etat_joueurs.json", $etat);
+      }
+    } else {
+      $error = "❌ Joueur 2 est déjà occupé !";
     }
   }
 
   $role = $_SESSION["role"] ?? "Aucun rôle";
+  $error = $error ?? "";
 ?>
 
 <!DOCTYPE html>
@@ -31,6 +49,11 @@
   </head>
   <body>
     <h1>Connexion aux rôles</h1>
+    
+    <?php if ($error): ?>
+      <p style="color: red; font-weight: bold;"><?= $error ?></p>
+    <?php endif; ?>
+    
     <h2>Votre rôle actuel : <strong><?= $role ?></strong></h2>
     <div id="bloc">
       <p>

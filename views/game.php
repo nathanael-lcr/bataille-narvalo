@@ -1,19 +1,22 @@
 <?php
-  include('./scripts/sql-connect.php');
+include('./scripts/sql-connect.php');
 
-  ini_set('display_errors', 1);
-  ini_set('display_startup_errors', 1);
-  error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-  $sql = new SqlConnect();
-  $player = $_SESSION["role"] === 'joueur1' ?  'joueur2' : 'joueur1';
-  $query = 'SELECT * FROM '.$player;
+$sql = new SqlConnect();
+$player = $_SESSION["role"] === 'joueur1' ? 'joueur2' : 'joueur1';
+$query = 'SELECT * FROM ' . $player;
 
-  $req = $sql->db->prepare($query);
-  $req->execute();
-  $rows = $req->fetchAll(PDO::FETCH_ASSOC);
-  
-  $colsPerRow = 10;
+$req = $sql->db->prepare($query);
+$req->execute();
+$rows = $req->fetchAll(PDO::FETCH_ASSOC);
+
+// Vérifier si c'est le tour du joueur actuel
+$isMyTurn = ($_SESSION["role"] === $currentTurn);
+
+$colsPerRow = 10;
 ?>
 
 <!DOCTYPE html>
@@ -51,8 +54,18 @@
                   echo '</div>';
               }
           }
+
+          $idgrid = $case['idgrid'];
+
+          echo '<div class="col">';
+          echo '<form method="post" action="../scripts/click_case.php" class=form>';
+          echo '<button type="submit" name="cell" value="' . $idgrid . '" class="cell" style="background-color:' . $color . ';"></button>';
+          echo '</form>';
           echo '</div>';
+        }
       }
+      echo '</div>';
+    }
     ?>
     </div>
     <form method="post" action="../scripts/reset_total.php">
