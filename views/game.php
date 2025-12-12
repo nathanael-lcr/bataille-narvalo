@@ -8,9 +8,12 @@ error_reporting(E_ALL);
 $sql = new SqlConnect();
 $player = $_SESSION["role"] === 'joueur1' ? 'joueur2' : 'joueur1';
 $query = 'SELECT * FROM ' . $player;
+
 $req = $sql->db->prepare($query);
 $req->execute();
 $rows = $req->fetchAll(PDO::FETCH_ASSOC);
+//colonnes par lignes
+$colsPerRow = 10;
 
 //victoire
 $sql_victory = new SqlConnect();
@@ -27,11 +30,9 @@ $touches_j2 = $req2->fetch(PDO::FETCH_ASSOC)['touches'];
 // Vérifier si c'est le tour du joueur actuel
 $is_my_turn = ($_SESSION["role"] === $current_turn);
 
-//colonnes par lignes
-$colsPerRow = 10;
 
 //condition victoire
-if ($touches_j1 >= 1) {
+if ($touches_j1 >= 6) {
   echo '<div class="victory">
         VICTOIRE DU JOUEUR 1
         </div>';
@@ -77,7 +78,13 @@ if ($touches_j2 >= 6) {
 
       <div>
         <h3>Grille adverse</h3>
+        
         <?php
+        if (isset($_SESSION['message'])) {
+            echo "<p class='message'>" . $_SESSION['message'] . "</p>";
+            unset($_SESSION['message']); // pour afficher qu’une seule fois
+        }
+
         for ($i = 0; $i < count($rows); $i += $colsPerRow) {
         //crée lignes
           echo '<div class="row">';
@@ -93,7 +100,6 @@ if ($touches_j2 >= 6) {
               echo '<div class="col">';
               echo '<form method="post" action="../scripts/click_case.php">';
               echo '<button type="submit" name="cell" value="' . $case['idgrid'] . '" class="cell" style="background-color:' . $color . ';"></button>';
-               echo '<form method="post" action="../scripts/boats_hits.php">';
               echo '</form>';
               echo '</div>';
             }

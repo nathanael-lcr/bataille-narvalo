@@ -1,5 +1,5 @@
 <?php
-//header("Refresh: 2");
+header("Refresh: 2");
 session_start();
 
 $fichier = "./etat_joueurs.json";
