@@ -4,22 +4,24 @@ body{
     background: radial-gradient(circle,rgba(92, 92, 92, 1) 0%, rgba(0, 0, 0, 1) 100%);
     background-attachment: fixed; /* Le dégradé reste fixe au scroll */
     text-align: center;
+
+	font-family: "Montserrat", sans-serif;
+  	font-optical-sizing: auto;
 	}
 
 h1, h2{
 	text-transform: uppercase;
 	color: white;
-	font-family: "Sekuya", system-ui;
+	font-family: "Sekuya", system-ui !important;
   	font-weight: 400;
   	font-style: normal;
 }
-h2, p {
-	font-family: "Montserrat", sans-serif;
-  	font-optical-sizing: auto;
+h2, p, h3 {
   	font-weight: 300;
   	font-style: normal;
 	color: white;
 }
+
 /* GRILLE */
 .row {
 	display: flex;
@@ -72,4 +74,12 @@ h2, p {
 	margin-left: 120px;
 	margin-right: 120px;
 	border-radius: 5px !important;
+}
+
+
+.turn-indicator{
+	color:white;
+}
+.victory{
+	color:white;
 }

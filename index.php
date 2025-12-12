@@ -1,5 +1,5 @@
 <?php
-header("Refresh: 2");
+//header("Refresh: 2");
 session_start();
 
 $fichier = "./etat_joueurs.json";
@@ -16,10 +16,10 @@ if (!isset($etat['current_turn'])) {
   file_put_contents($fichier, json_encode($gameetatState));
 }
 
-$currentTurn = $etat['current_turn'];
+$current_turn = $etat['current_turn'];
 
 // Vérifier si c'est le tour du joueur actuel
-$isMyTurn = ($_SESSION["role"] === $currentTurn);
+$is_my_turn = ($_SESSION["role"] === $current_turn);
 
 
 if ($etat["j1"] != null && $etat["j2"] != null) {

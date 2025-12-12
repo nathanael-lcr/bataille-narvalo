@@ -2,15 +2,15 @@
   session_start();
   include('./scripts/save_state.php');
 
-  $currentSession = session_id();
+  $current_session = session_id();
 
   if (isset($_POST["joueur1"])) {
     if ($etat["j1"] === null) {
       // Vérifier que cette session n'est pas déjà joueur2
-      if ($etat["j2"] === $currentSession) {
+      if ($etat["j2"] === $current_session) {
         $error = "❌ Erreur : Vous êtes déjà Joueur 2 !";
       } else {
-        $etat["j1"] = $currentSession;
+        $etat["j1"] = $current_session;
         $_SESSION["role"] = "joueur1";
         save_state("./etat_joueurs.json", $etat);
       }
@@ -22,10 +22,10 @@
   if (isset($_POST["joueur2"])) {
     if ($etat["j2"] === null) {
       // Vérifier que cette session n'est pas déjà joueur1
-      if ($etat["j1"] === $currentSession) {
+      if ($etat["j1"] === $current_session) {
         $error = "❌ Erreur : Vous êtes déjà Joueur 1 !";
       } else {
-        $etat["j2"] = $currentSession;
+        $etat["j2"] = $current_session;
         $_SESSION["role"] = "joueur2";
         save_state("./etat_joueurs.json", $etat);
       }

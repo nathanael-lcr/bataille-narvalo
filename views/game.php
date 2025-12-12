@@ -25,16 +25,22 @@ $touches_j2 = $req2->fetch(PDO::FETCH_ASSOC)['touches'];
 
 
 // Vérifier si c'est le tour du joueur actuel
-$isMyTurn = ($_SESSION["role"] === $currentTurn);
+$is_my_turn = ($_SESSION["role"] === $current_turn);
+
+//colonnes par lignes
 $colsPerRow = 10;
 
 //condition victoire
-if ($touches_j1 >= 5) {
-  echo 'VICTOIRE DU JOUEUR 1';
+if ($touches_j1 >= 1) {
+  echo '<div class="victory">
+        VICTOIRE DU JOUEUR 1
+        </div>';
 }
 
-if ($touches_j2 >= 5) {
-  echo 'VICTOIRE DU JOUEUR 2';
+if ($touches_j2 >= 6) {
+  echo '<div class="victory">
+        VICTOIRE DU JOUEUR 2
+        </div>';
 }
 ?>
 
@@ -59,11 +65,11 @@ if ($touches_j2 >= 5) {
 <body>
   <div class="container text-center">
 
-    <div class="turn-indicator <?php echo $isMyTurn ? 'my-turn' : 'not-my-turn'; ?>">
-      <?php if ($isMyTurn): ?>
+    <div class="turn-indicator <?php echo $is_my_turn ? 'my-turn' : 'not-my-turn'; ?>">
+      <?php if ($is_my_turn): ?>
         🎯 C'est votre tour ! (<?php echo $_SESSION["role"]; ?>)
       <?php else: ?>
-        ⏳ En attente du tour de <?php echo $currentTurn; ?>
+        ⏳ En attente du tour de <?php echo $current_turn; ?>
       <?php endif; ?>
     </div>
 
@@ -71,13 +77,15 @@ if ($touches_j2 >= 5) {
 
       <div>
         <h3>Grille adverse</h3>
-
         <?php
         for ($i = 0; $i < count($rows); $i += $colsPerRow) {
+        //crée lignes
           echo '<div class="row">';
           for ($j = 0; $j < $colsPerRow; $j++) {
+          //crée colonnes dans lignes
             if (isset($rows[$i + $j])) {
               $case = $rows[$i + $j];
+              //case entre dans BDD
               $color = $case['checked'] == 1 ? '#2C38B8' : '#F2EFEB';
               if ($case['checked'] == 1 && $case['boat'] > 0) {
                 $color = '#B82C2C';
@@ -85,6 +93,7 @@ if ($touches_j2 >= 5) {
               echo '<div class="col">';
               echo '<form method="post" action="../scripts/click_case.php">';
               echo '<button type="submit" name="cell" value="' . $case['idgrid'] . '" class="cell" style="background-color:' . $color . ';"></button>';
+               echo '<form method="post" action="../scripts/boats_hits.php">';
               echo '</form>';
               echo '</div>';
             }
